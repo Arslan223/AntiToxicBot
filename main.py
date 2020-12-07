@@ -302,6 +302,7 @@ def main():
         user_id = str(query.from_user.id)
         admin_id = str(query.message.reply_to_message.from_user.id)
         admins = [str(member.user.id) for member in bot.get_chat_administrators(chat_id)]
+
         val = float(query.data[3:])
         data = gdata.load()
         if user_id == admin_id:
