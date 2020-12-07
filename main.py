@@ -278,6 +278,10 @@ def main():
             func = lambda mode: mode == data[chat_id]["value"]
             mark1 = lambda mode: ">" if func(mode) else ""
             mark2 = lambda mode: "<" if func(mode) else ""
+            val = 1
+            btn = telebot.types.InlineKeyboardButton(f"{mark1(val)} {str(val)} {mark2(val)}",
+                                                     callback_data=f"c_c{str(val)}")
+            markup.row(btn)
             for i in range(0, 5):
                 val = round(0.95 - i / 10, 2)
                 btn = telebot.types.InlineKeyboardButton(f"{mark1(val)} {str(val)} {mark2(val)}", callback_data=f"c_c{str(val)}")
