@@ -76,25 +76,23 @@ def main():
             buser_id = str(message.reply_to_message.from_user.id)
             admins = [str(member.user.id) for member in bot.get_chat_administrators(chat_id)]
             flag = False
-            try:
+            if message.text[6:20] == "@saynotoxicbot":
+                limit = float(message.text[21:])
+            else:
                 limit = float(message.text[7:])
-            except ValueError:
-                flag = True
+            # /limit@saynotoxicbot 0.01
             if len(message.text) < 8 or limit > 1 or limit < 0 or not(user_id in admins) or buser_id == '1442103439' or flag:
                 bot.reply_to(message, "⛔️")
             else:
                 if limit == 0:
                     limit = None
-                try:
                     data[chat_id]["users"][buser_id]["limit"] = limit
                     gdata.update(data)
                     bot.reply_to(message.reply_to_message,
                                  "Новый лимит пользователя - " + (str(limit) if limit != None else "по умолчанию"))
-                except:
-                    bot.reply_to(message, "⛔️")
 
-        except AttributeError:
-            pass
+        except:
+            bot.reply_to(message, "⛔️")
 
     @bot.message_handler(commands=["top"])
     def on_top(message):
