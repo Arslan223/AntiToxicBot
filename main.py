@@ -5,8 +5,7 @@ import gdata
 import time
 from math import floor
 
-API_KEY = "AIzaSyDGEwA_FE5fKfnA5aaXuUl_veJ0B2Iy68o"
-BOT_API_KEY = "1442103439:AAFN6GhtGb4lw2FQVLd7SSKCOnmR_o9YkVo"
+
 
 
 def get_toxicity(phrase, lang="ru", api_key=API_KEY):
