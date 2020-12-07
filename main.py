@@ -324,11 +324,12 @@ def main():
         else:
             bot.answer_callback_query(query.id, "Эту панель настроек вызвали не вы", show_alert=True)
 
-    try:
-        bot.polling(none_stop=True)
-    except Exception as e:
-        bot.send_message(316490607, e)
-        time.sleep(5)
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except Exception as e:
+            bot.send_message(316490607, e)
+            time.sleep(5)
 
 
 
