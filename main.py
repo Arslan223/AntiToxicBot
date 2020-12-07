@@ -65,7 +65,7 @@ def main():
         message_id = str(message.message_id)
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
-        if user_id == ['1442103439', '777000', '1087968824']:
+        if user_id != ['1442103439', '777000', '1087968824']:
             data = gdata.load()
             if not (chat_id in data):
                 data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
@@ -245,7 +245,7 @@ def main():
     def reply_message(message):
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
-        if user_id == ['1442103439', '777000', '1087968824']:
+        if user_id != ['1442103439', '777000', '1087968824']:
             data = gdata.load()
             if not(chat_id in data):
                 data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
