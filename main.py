@@ -390,7 +390,7 @@ def main():
             bot.polling(none_stop=True)
         except Exception as e:
             bot.send_message(316490607, e)
-            time.sleep(5)
+            time.sleep(0.01)
 
 
 
