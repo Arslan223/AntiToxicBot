@@ -150,8 +150,8 @@ def main():
             else:
                 if limit == 0:
                     limit = None
-                    data[chat_id]["users"][buser_id]["limit"] = limit
-                    gdata.update(data)
+                data[chat_id]["users"][buser_id]["limit"] = limit
+                gdata.update(data)
                 bot.reply_to(message.reply_to_message,
                                  "Новый лимит пользователя - " + (str(limit) if limit != None else "по умолчанию"))
 
