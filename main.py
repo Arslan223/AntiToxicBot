@@ -144,7 +144,7 @@ def main():
             else:
                 limit = float(message.text[7:])
             # /limit@saynotoxicbot 0.01
-            if len(message.text) < 8 or limit > 1 or limit < 0 or not(user_id in admins) or buser_id == '1442103439' or flag:
+            if len(message.text) < 8 or limit > 1 or limit < 0 or not(user_id in admins) or buser_id in ['1442103439', '777000', '1087968824'] or flag:
                 bot.reply_to(message, "⛔️")
             else:
                 if limit == 0:
@@ -216,7 +216,26 @@ def main():
         bot.reply_to(message, string, parse_mode="Markdown")
 
 
-
+    @bot.channel_post_handler(func=lambda message: message.chat.type == "channel" and (message.text.startswith("/s")))
+    def on_spoiler_channel(message):
+        name, text = gen_spoiler(message.text)
+        if name is None:
+            bot.reply_to(message, "Неправильный формат.\nПравильный:\n/spoiler (название фильма/книги и т.п.) текст спойлера")
+            return 0
+        message_id = str(message.message_id)
+        chat_id = str(message.chat.id)
+        data = gdata.load()
+        if not("spoilers" in data):
+            data.update({"spoilers": {}})
+        gdata.update(data)
+        data = gdata.load()
+        data["spoilers"].update({"sp"+chat_id+message_id: text})
+        gdata.update(data)
+        markup = telebot.types.InlineKeyboardMarkup()
+        btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
+        markup.row(btn1)
+        bot.send_message(chat_id, f"Спойлер к '{name}'", reply_markup=markup)
+        bot.delete_message(message.chat.id, message.message_id)
 
 
 
@@ -224,42 +243,42 @@ def main():
     def reply_message(message):
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
+        if user_id == ['1442103439', '777000', '1087968824']:
+            data = gdata.load()
+            if not(chat_id in data):
+                data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
+                gdata.update(data)
 
-        data = gdata.load()
-        if not(chat_id in data):
-            data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
+            data = gdata.load()
+            if not(user_id in data[chat_id]["users"]):
+                data[chat_id]["users"].update({user_id: {"limit": None, "score": 0, "first_name": message.from_user.first_name, "last_name": message.from_user.last_name, "id": user_id, "count": 1}})
+            data[chat_id]["users"][user_id]["count"] += 1
             gdata.update(data)
 
-        data = gdata.load()
-        if not(user_id in data[chat_id]["users"]):
-            data[chat_id]["users"].update({user_id: {"limit": None, "score": 0, "first_name": message.from_user.first_name, "last_name": message.from_user.last_name, "id": user_id, "count": 1}})
-        data[chat_id]["users"][user_id]["count"] += 1
-        gdata.update(data)
+            try:
+                toxicity = get_toxicity(message.text)
+                if toxicity is None:
+                    raise Exception
+            except Exception as e:
+                print(e)
+                toxicity = 0
+            data = gdata.load()
+            try:
+                print(data[chat_id]["users"][user_id]["limit"])
+                data[chat_id]["users"][user_id]["score"] += floor(toxicity * 100)
+                if toxicity > (data[chat_id]["users"][user_id]["limit"] if data[chat_id]["users"][user_id]["limit"] is not None else data[chat_id]["value"]):
+                    if data[chat_id]["mode"] == 2:
+                        bot.delete_message(chat_id, message.message_id)
+                    elif data[chat_id]["mode"] == 1:
+                        markup = telebot.types.InlineKeyboardMarkup()
+                        btn = telebot.types.InlineKeyboardButton("Delete", callback_data=f"del{str(message.message_id)}")
+                        markup.row(btn)
+                        bot.reply_to(message, f"Toxic alert", parse_mode="Markdown", reply_markup=markup)
 
-        try:
-            toxicity = get_toxicity(message.text)
-            if toxicity is None:
-                raise Exception
-        except Exception as e:
-            print(e)
-            toxicity = 0
-        data = gdata.load()
-        try:
-            print(data[chat_id]["users"][user_id]["limit"])
-            data[chat_id]["users"][user_id]["score"] += floor(toxicity * 100)
-            if toxicity > (data[chat_id]["users"][user_id]["limit"] if data[chat_id]["users"][user_id]["limit"] is not None else data[chat_id]["value"]):
-                if data[chat_id]["mode"] == 2:
-                    bot.delete_message(chat_id, message.message_id)
-                elif data[chat_id]["mode"] == 1:
-                    markup = telebot.types.InlineKeyboardMarkup()
-                    btn = telebot.types.InlineKeyboardButton("Delete", callback_data=f"del{str(message.message_id)}")
-                    markup.row(btn)
-                    bot.reply_to(message, f"Toxic alert", parse_mode="Markdown", reply_markup=markup)
-
-            gdata.update(data)
-        except TypeError as e:
-            print(e)
-            pass
+                gdata.update(data)
+            except TypeError as e:
+                print(e)
+                pass
 
     @bot.callback_query_handler(func=lambda query: query.data.startswith("sp"))
     def to_spoiler(query):
