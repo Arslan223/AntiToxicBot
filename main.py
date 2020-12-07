@@ -4,7 +4,7 @@ import telebot
 import gdata
 import time
 from math import floor
-
+from consts import API_KEY, BOT_API_KEY
 
 
 
