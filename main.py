@@ -65,30 +65,31 @@ def main():
         message_id = str(message.message_id)
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
-        data = gdata.load()
-        if not (chat_id in data):
-            data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
-            gdata.update(data)
+        if user_id == ['1442103439', '777000', '1087968824']:
+            data = gdata.load()
+            if not (chat_id in data):
+                data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
+                gdata.update(data)
 
-        data = gdata.load()
-        if not (user_id in data[chat_id]["users"]):
-            data[chat_id]["users"].update({user_id: {"limit": None, "score": 0,
-                                                     "first_name": message.from_user.first_name,
-                                                     "last_name": message.from_user.last_name, "id": user_id,
-                                                     "count": 1}})
-        gdata.update(data)
-        data = gdata.load()
-        if not("spoilers" in data):
-            data.update({"spoilers": {}})
-        gdata.update(data)
-        data = gdata.load()
-        data["spoilers"].update({"sp"+chat_id+message_id: text})
-        gdata.update(data)
-        markup = telebot.types.InlineKeyboardMarkup()
-        btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
-        markup.row(btn1)
-        bot.send_message(chat_id, f"{message.from_user.first_name}: Спойлер к '{name}'", reply_markup=markup)
-        bot.delete_message(message.chat.id, message.message_id)
+            data = gdata.load()
+            if not (user_id in data[chat_id]["users"]):
+                data[chat_id]["users"].update({user_id: {"limit": None, "score": 0,
+                                                         "first_name": message.from_user.first_name,
+                                                         "last_name": message.from_user.last_name, "id": user_id,
+                                                         "count": 1}})
+            gdata.update(data)
+            data = gdata.load()
+            if not("spoilers" in data):
+                data.update({"spoilers": {}})
+            gdata.update(data)
+            data = gdata.load()
+            data["spoilers"].update({"sp"+chat_id+message_id: text})
+            gdata.update(data)
+            markup = telebot.types.InlineKeyboardMarkup()
+            btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
+            markup.row(btn1)
+            bot.send_message(chat_id, f"{message.from_user.first_name}: Спойлер '{name}'", reply_markup=markup)
+            bot.delete_message(message.chat.id, message.message_id)
 
 
     @bot.message_handler(commands=["settings"])
@@ -234,7 +235,7 @@ def main():
         markup = telebot.types.InlineKeyboardMarkup()
         btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
         markup.row(btn1)
-        bot.send_message(chat_id, f"Спойлер к '{name}'", reply_markup=markup)
+        bot.send_message(chat_id, f"Спойлер '{name}'", reply_markup=markup)
         bot.delete_message(message.chat.id, message.message_id)
 
 
