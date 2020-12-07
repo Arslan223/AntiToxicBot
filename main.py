@@ -24,6 +24,10 @@ def get_toxicity(phrase, lang="ru", api_key=API_KEY):
 def main():
     bot = telebot.TeleBot(BOT_API_KEY)
 
+    @bot.message_handler(func=lambda message: message.chat.type == 'private')
+    def on_private(message):
+        bot.reply_to(message, "Я предназначен для групп) Просто добавь меня к своим друзьям и я буду защищать вас от токсиков!")
+
     @bot.message_handler(commands=["settings"])
     def on_settings(message):
         chat_id = str(message.chat.id)
