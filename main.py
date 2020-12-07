@@ -4,7 +4,7 @@ import telebot
 import gdata
 import time
 from math import floor
-
+from consts import API_KEY, BOT_API_KEY
 
 
 
@@ -71,7 +71,7 @@ def main():
         data = gdata.load()
         string = "*Адекватность*\n\n"
         users = [data[chat_id]["users"][i] for i in data[chat_id]["users"]]
-        users = sorted(users, key=lambda user: user["score"])
+        users = sorted(users, key=lambda user: user["score"] // data[chat_id]['users'][str(user['id'])]['count'])
         # users.reverse()
         medals = ["🥇", "🥈", "🥉"]
         for i in range(len(users)):
