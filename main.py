@@ -217,26 +217,27 @@ def main():
         bot.reply_to(message, string, parse_mode="Markdown")
 
 
-    @bot.channel_post_handler(func=lambda message: message.chat.type == "channel" and (message.text.startswith("/s")))
+    @bot.channel_post_handler(func=lambda message: message.chat.type == "channel")
     def on_spoiler_channel(message):
-        name, text = gen_spoiler(message.text)
-        if name is None:
-            bot.reply_to(message, "Неправильный формат.\nПравильный:\n/spoiler (название фильма/книги и т.п.) текст спойлера")
-            return 0
-        message_id = str(message.message_id)
-        chat_id = str(message.chat.id)
-        data = gdata.load()
-        if not("spoilers" in data):
-            data.update({"spoilers": {}})
-        gdata.update(data)
-        data = gdata.load()
-        data["spoilers"].update({"sp"+chat_id+message_id: text})
-        gdata.update(data)
-        markup = telebot.types.InlineKeyboardMarkup()
-        btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
-        markup.row(btn1)
-        bot.send_message(chat_id, f"Спойлер '{name}'", reply_markup=markup)
-        bot.delete_message(message.chat.id, message.message_id)
+        if message.text.startswith("/s"):
+            name, text = gen_spoiler(message.text)
+            if name is None:
+                bot.reply_to(message, "Неправильный формат.\nПравильный:\n/spoiler (название фильма/книги и т.п.) текст спойлера")
+                return 0
+            message_id = str(message.message_id)
+            chat_id = str(message.chat.id)
+            data = gdata.load()
+            if not("spoilers" in data):
+                data.update({"spoilers": {}})
+            gdata.update(data)
+            data = gdata.load()
+            data["spoilers"].update({"sp"+chat_id+message_id: text})
+            gdata.update(data)
+            markup = telebot.types.InlineKeyboardMarkup()
+            btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
+            markup.row(btn1)
+            bot.send_message(chat_id, f"Спойлер '{name}'", reply_markup=markup)
+            bot.delete_message(message.chat.id, message.message_id)
 
 
 
