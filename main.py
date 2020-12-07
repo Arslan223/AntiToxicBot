@@ -29,6 +29,17 @@ def main():
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
         data = gdata.load()
+        if not (chat_id in data):
+            data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
+            gdata.update(data)
+
+        data = gdata.load()
+        if not (user_id in data[chat_id]["users"]):
+            data[chat_id]["users"].update({user_id: {"limit": None, "score": 0,
+                                                     "first_name": message.from_user.first_name,
+                                                     "last_name": message.from_user.last_name, "id": user_id,
+                                                     "count": 1}})
+        gdata.update(data)
         admins = [str(member.user.id) for member in bot.get_chat_administrators(chat_id)]
         if user_id in admins:
             markup = telebot.types.InlineKeyboardMarkup()
@@ -46,6 +57,18 @@ def main():
             chat_id = str(message.chat.id)
             user_id = str(message.from_user.id)
             data = gdata.load()
+            if not (chat_id in data):
+                data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
+                gdata.update(data)
+
+            data = gdata.load()
+            if not (user_id in data[chat_id]["users"]):
+                data[chat_id]["users"].update({user_id: {"limit": None, "score": 0,
+                                                         "first_name": message.from_user.first_name,
+                                                         "last_name": message.from_user.last_name, "id": user_id,
+                                                         "count": 1}})
+            gdata.update(data)
+            data = gdata.load()
             buser_id = str(message.reply_to_message.from_user.id)
             admins = [str(member.user.id) for member in bot.get_chat_administrators(chat_id)]
             flag = False
@@ -58,9 +81,14 @@ def main():
             else:
                 if limit == 0:
                     limit = None
-                data[chat_id]["users"][buser_id]["limit"] = limit
-                gdata.update(data)
-                bot.reply_to(message.reply_to_message, "Новый лимит пользователя - " + (str(limit) if limit != None else "по умолчанию"))
+                try:
+                    data[chat_id]["users"][buser_id]["limit"] = limit
+                    gdata.update(data)
+                    bot.reply_to(message.reply_to_message,
+                                 "Новый лимит пользователя - " + (str(limit) if limit != None else "по умолчанию"))
+                except:
+                    bot.reply_to(message, "⛔️")
+
         except AttributeError:
             pass
 
@@ -68,6 +96,18 @@ def main():
     def on_top(message):
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
+        data = gdata.load()
+        if not (chat_id in data):
+            data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
+            gdata.update(data)
+
+        data = gdata.load()
+        if not (user_id in data[chat_id]["users"]):
+            data[chat_id]["users"].update({user_id: {"limit": None, "score": 0,
+                                                     "first_name": message.from_user.first_name,
+                                                     "last_name": message.from_user.last_name, "id": user_id,
+                                                     "count": 1}})
+        gdata.update(data)
         data = gdata.load()
         string = "*Адекватность*\n\n"
         users = [data[chat_id]["users"][i] for i in data[chat_id]["users"]]
@@ -86,6 +126,18 @@ def main():
     def on_top(message):
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
+        data = gdata.load()
+        if not (chat_id in data):
+            data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
+            gdata.update(data)
+
+        data = gdata.load()
+        if not (user_id in data[chat_id]["users"]):
+            data[chat_id]["users"].update({user_id: {"limit": None, "score": 0,
+                                                     "first_name": message.from_user.first_name,
+                                                     "last_name": message.from_user.last_name, "id": user_id,
+                                                     "count": 1}})
+        gdata.update(data)
         data = gdata.load()
         string = "*Пользователи*\n\n"
         users = [data[chat_id]["users"][i] for i in data[chat_id]["users"]]
