@@ -65,7 +65,7 @@ def main():
         message_id = str(message.message_id)
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
-        if user_id != ['1442103439', '777000', '1087968824']:
+        if user_id not in ['1442103439', '777000', '1087968824']:
             data = gdata.load()
             if not (chat_id in data):
                 data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
@@ -88,7 +88,7 @@ def main():
             markup = telebot.types.InlineKeyboardMarkup()
             btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
             markup.row(btn1)
-            bot.send_message(chat_id, f"{message.from_user.first_name}: Спойлер '{name}'", reply_markup=markup)
+            bot.send_message(chat_id, f"{message.from_user.first_name}: Спойлер '{name}'", reply_markup=markup, reply_to_message_id=message.reply_to_message)
             bot.delete_message(message.chat.id, message.message_id)
 
 
@@ -245,7 +245,7 @@ def main():
     def reply_message(message):
         chat_id = str(message.chat.id)
         user_id = str(message.from_user.id)
-        if user_id != ['1442103439', '777000', '1087968824']:
+        if user_id not in ['1442103439', '777000', '1087968824']:
             data = gdata.load()
             if not(chat_id in data):
                 data.update({chat_id: {"users": {}, "mode": 1, "value": 0.85, "can_del": True}})
