@@ -293,6 +293,7 @@ def main():
                 print(e)
                 toxicity = 0
             data = gdata.load()
+            print(text, toxicity)
             try:
                 print(data[chat_id]["users"][user_id]["limit"])
                 data[chat_id]["users"][user_id]["score"] += floor(toxicity * 100)
