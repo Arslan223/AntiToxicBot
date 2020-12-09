@@ -88,7 +88,10 @@ def main():
             markup = telebot.types.InlineKeyboardMarkup()
             btn1 = telebot.types.InlineKeyboardButton("Показать", callback_data="sp"+chat_id+message_id)
             markup.row(btn1)
-            bot.send_message(chat_id, f"{message.from_user.first_name}: Спойлер '{name}'", reply_markup=markup, reply_to_message_id=message.reply_to_message)
+            if message.reply_to_message is not None:
+                bot.reply_to(message.reply_to_message, f"{message.from_user.first_name}: Спойлер '{name}'", reply_markup=markup)
+            else:
+                bot.send_message(chat_id, f"{message.from_user.first_name}: Спойлер '{name}'", reply_markup=markup)
             bot.delete_message(message.chat.id, message.message_id)
 
 
