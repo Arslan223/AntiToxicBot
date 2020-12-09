@@ -45,8 +45,8 @@ def transliterate(text:str):
 
     text = text.lower()
 
-    for key in slovar:
-        text = text.replace(key, slovar[key])
+    for key in dictt:
+        text = text.replace(key, dictt[key])
     return text
 
 
