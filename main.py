@@ -36,6 +36,20 @@ def gen_spoiler(command):
     return name, text
 
 
+def transliterate(text:str):
+    dictt = {
+        'a': 'а', 'b': 'б', 'v': 'в', 'g': 'г', 'd': 'д', 'e': 'э', 'yo': 'ё', 'zh': 'ж', 'z': 'з', 'i': 'й',
+        'k': 'к', 'l': 'л', 'm': 'м', 'n': 'н', 'o': 'о', 'p': 'п', 'r': 'р', 's': 'с', 't': 'т', 'u': 'ю',
+        'f': 'ф', 'h': 'х', 'c': 'ц', 'ch': 'ч', 'sh': 'ш', 'sch': 'щ', '': 'ь', 'y': 'ы', 'ya': 'я'
+    }
+
+    text = text.lower()
+
+    for key in slovar:
+        text = text.replace(key, slovar[key])
+    return text
+
+
 def main():
     bot = telebot.TeleBot(BOT_API_KEY)
 
@@ -260,8 +274,19 @@ def main():
             data[chat_id]["users"][user_id]["count"] += 1
             gdata.update(data)
 
+            if message.text:
+                text = message.text
+            elif message.caption:
+                text = message.caption
+            else:
+                text = None
+
+            if text is not None:
+                text = transliterate(text)
+
+
             try:
-                toxicity = get_toxicity(message.text)
+                toxicity = get_toxicity(text)
                 if toxicity is None:
                     raise Exception
             except Exception as e:
