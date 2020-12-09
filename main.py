@@ -521,6 +521,8 @@ def main():
         try:
             bot.polling(none_stop=True)
         except Exception as e:
+            if e is KeyboardInterrupt:
+                break
             bot.send_message(316490607, e)
             time.sleep(0.01)
 
