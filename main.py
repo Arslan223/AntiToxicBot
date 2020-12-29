@@ -202,7 +202,7 @@ def main():
                 string += medals[i] + " "
             user = users[i]
             user_last_name = user["last_name"] if user["last_name"] is not None else ""
-            string += f"_{user['first_name']} {user_last_name}_ - `{data[chat_id]['users'][str(user['id'])]['score'] // data[chat_id]['users'][str(user['id'])]['count']}` 🍬\n"
+            string += f"_{user['first_name']} {user_last_name}_ - `{20 - (data[chat_id]['users'][str(user['id'])]['score'] // data[chat_id]['users'][str(user['id'])]['count'])}` 🍬\n"
         bot.reply_to(message, string, parse_mode="Markdown")
 
     @bot.message_handler(commands=["users"])
